@@ -1,5 +1,7 @@
 # Mensagem Brasil — Production-Grade LLM Application for Personalized Text Generation via WhatsApp
 
+https://mensagem-brasil.com/
+
 > A multi-tenant SaaS that generates and delivers personalized, daily messages to WhatsApp recipients using GPT-4o (text) and DALL·E 3 (image), with a fixed monthly infrastructure cost of approximately **US$3.50**, independent of message volume.
 
 [![Stack](https://img.shields.io/badge/stack-Node.js%20%7C%20PostgreSQL%20%7C%20Docker-2ea44f)](#tech-stack)
