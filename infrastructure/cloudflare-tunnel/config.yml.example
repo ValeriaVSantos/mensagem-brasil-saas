@@ -1,0 +1,26 @@
+# Cloudflare Tunnel configuration
+#
+# Steps:
+# 1. cloudflared tunnel login
+# 2. cloudflared tunnel create mensagem-brasil    (note the UUID)
+# 3. Save this file as ~/.cloudflared/config.yml
+# 4. Replace REPLACE_WITH_YOUR_UUID below
+# 5. cloudflared tunnel route dns mensagem-brasil api.YOURDOMAIN.com
+# 6. cloudflared tunnel route dns mensagem-brasil dashboard.YOURDOMAIN.com
+# 7. cloudflared service install
+# 8. systemctl start cloudflared
+
+tunnel: REPLACE_WITH_YOUR_UUID
+credentials-file: /root/.cloudflared/REPLACE_WITH_YOUR_UUID.json
+
+ingress:
+  # Evolution API (WhatsApp bridge)
+  - hostname: api.YOURDOMAIN.com
+    service: http://localhost:8080
+
+  # Customer-facing dashboard
+  - hostname: dashboard.YOURDOMAIN.com
+    service: http://localhost:3000
+
+  # Catch-all (required at the end of the ingress list)
+  - service: http_status:404

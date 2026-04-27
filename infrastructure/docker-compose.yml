@@ -1,0 +1,61 @@
+version: '3.8'
+
+# Mensagem Brasil — full service topology
+#
+# Before deploying:
+# 1. Replace POSTGRES_PASSWORD with a strong secret (openssl rand -hex 20)
+# 2. Replace SERVER_URL with your domain
+# 3. Replace AUTHENTICATION_API_KEY with a strong secret (openssl rand -hex 20)
+# 4. Make sure UDP 7844 outbound is allowed in your firewall (Cloudflare Tunnel QUIC)
+
+services:
+  # Primary database — also used by the application schema
+  postgres:
+    image: postgres:15-alpine
+    container_name: evolution-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: evolution
+      POSTGRES_USER: evolution
+      POSTGRES_PASSWORD: REPLACE_WITH_STRONG_PASSWORD
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - evolution-net
+
+  # Session cache for Evolution API
+  redis:
+    image: redis:7-alpine
+    container_name: evolution-redis
+    restart: always
+    networks:
+      - evolution-net
+
+  # WhatsApp bridge — Evolution API v2 (wraps Baileys)
+  evolution:
+    image: atendai/evolution-api:v2.3.7
+    container_name: evolution-api
+    restart: always
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      SERVER_URL: https://api.YOURDOMAIN.com
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://evolution:REPLACE_WITH_STRONG_PASSWORD@postgres:5432/evolution
+      CACHE_REDIS_ENABLED: 'true'
+      CACHE_REDIS_URI: redis://redis:6379/6
+      AUTHENTICATION_TYPE: apikey
+      AUTHENTICATION_API_KEY: REPLACE_WITH_GENERATED_API_KEY
+      QRCODE_LIMIT: '30'
+    networks:
+      - evolution-net
+
+volumes:
+  postgres_data:
+
+networks:
+  evolution-net:
+    driver: bridge
