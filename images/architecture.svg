@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="13">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#475569"/>
+    </marker>
+    <style>
+      .box { fill: #ffffff; stroke: #1e293b; stroke-width: 1.5; rx: 6; }
+      .box-cf { fill: #fff7ed; stroke: #c2410c; }
+      .box-server { fill: #f1f5f9; stroke: #0f172a; stroke-width: 2; }
+      .box-svc { fill: #ecfdf5; stroke: #047857; }
+      .box-ext { fill: #eff6ff; stroke: #1d4ed8; }
+      .box-make { fill: #fef3c7; stroke: #b45309; }
+      .label { font-weight: 600; fill: #0f172a; }
+      .sub { font-size: 11px; fill: #475569; }
+      .title { font-size: 14px; font-weight: 700; fill: #0f172a; }
+      .arrow-line { stroke: #475569; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="490" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">Mensagem Brasil — System Architecture</text>
+  <text x="490" y="48" text-anchor="middle" font-size="12" fill="#64748b">LLM application for personalized text generation via WhatsApp</text>
+
+  <!-- Make orchestration -->
+  <rect class="box box-make" x="60" y="80" width="860" height="80" rx="8"/>
+  <text class="title" x="490" y="105" text-anchor="middle">Make (Orchestration)</text>
+  <rect class="box box-make" x="120" y="115" width="220" height="35"/>
+  <text x="230" y="138" text-anchor="middle" class="label">Onboarding scenario</text>
+  <rect class="box box-make" x="380" y="115" width="220" height="35"/>
+  <text x="490" y="138" text-anchor="middle" class="label">Daily delivery (06:00)</text>
+  <rect class="box box-make" x="640" y="115" width="220" height="35"/>
+  <text x="750" y="138" text-anchor="middle" class="label">Disconnection alert (06:05)</text>
+
+  <!-- Cloudflare edge -->
+  <rect class="box box-cf" x="60" y="195" width="860" height="55" rx="8"/>
+  <text class="title" x="490" y="217" text-anchor="middle">Cloudflare (Edge · TLS · DDoS)</text>
+  <text class="sub" x="490" y="235" text-anchor="middle">api.YOURDOMAIN.com  ·  dashboard.YOURDOMAIN.com  ·  Tunnel via UDP 7844 QUIC</text>
+
+  <!-- Server box -->
+  <rect class="box box-server" x="60" y="285" width="600" height="280" rx="8"/>
+  <text class="title" x="360" y="307" text-anchor="middle">Hetzner CX23 · Ubuntu 24.04 · x86</text>
+
+  <!-- Inside server: Docker network -->
+  <rect class="box" x="80" y="325" width="560" height="130" rx="6" fill="#f8fafc" stroke="#94a3b8"/>
+  <text class="sub" x="100" y="343" font-weight="600">Docker network: evolution-net</text>
+
+  <rect class="box box-svc" x="100" y="355" width="155" height="80"/>
+  <text class="label" x="177" y="380" text-anchor="middle">PostgreSQL 15</text>
+  <text class="sub" x="177" y="398" text-anchor="middle">clientes</text>
+  <text class="sub" x="177" y="412" text-anchor="middle">contatos</text>
+  <text class="sub" x="177" y="426" text-anchor="middle">envios</text>
+
+  <rect class="box box-svc" x="280" y="355" width="155" height="80"/>
+  <text class="label" x="357" y="380" text-anchor="middle">Redis 7</text>
+  <text class="sub" x="357" y="398" text-anchor="middle">session cache</text>
+
+  <rect class="box box-svc" x="460" y="355" width="160" height="80"/>
+  <text class="label" x="540" y="380" text-anchor="middle">Evolution API v2</text>
+  <text class="sub" x="540" y="398" text-anchor="middle">Baileys</text>
+  <text class="sub" x="540" y="412" text-anchor="middle">WhatsApp bridge</text>
+  <text class="sub" x="540" y="426" text-anchor="middle">:8080</text>
+
+  <!-- Dashboard outside docker network but on server -->
+  <rect class="box box-svc" x="80" y="475" width="280" height="70"/>
+  <text class="label" x="220" y="498" text-anchor="middle">Dashboard</text>
+  <text class="sub" x="220" y="515" text-anchor="middle">Node.js 20 · Express · PM2 · :3000</text>
+  <text class="sub" x="220" y="530" text-anchor="middle">JWT auth · Helmet · rate-limit</text>
+
+  <rect class="box" x="380" y="475" width="260" height="70" fill="#fef9c3" stroke="#854d0e"/>
+  <text class="label" x="510" y="498" text-anchor="middle">cron · backup.sh</text>
+  <text class="sub" x="510" y="515" text-anchor="middle">daily 02:00 · pg_dump | gzip</text>
+  <text class="sub" x="510" y="530" text-anchor="middle">7-day retention</text>
+
+  <!-- External services -->
+  <rect class="box box-ext" x="700" y="285" width="220" height="280" rx="8"/>
+  <text class="title" x="810" y="307" text-anchor="middle">External services</text>
+
+  <rect class="box box-ext" x="720" y="325" width="180" height="60"/>
+  <text class="label" x="810" y="347" text-anchor="middle">OpenAI</text>
+  <text class="sub" x="810" y="365" text-anchor="middle">GPT-4o (text)</text>
+  <text class="sub" x="810" y="378" text-anchor="middle">DALL·E 3 (image)</text>
+
+  <rect class="box box-ext" x="720" y="400" width="180" height="40"/>
+  <text class="label" x="810" y="425" text-anchor="middle">Resend (email)</text>
+
+  <rect class="box box-ext" x="720" y="455" width="180" height="40"/>
+  <text class="label" x="810" y="480" text-anchor="middle">Kiwify (payments)</text>
+
+  <rect class="box box-ext" x="720" y="510" width="180" height="40"/>
+  <text class="label" x="810" y="535" text-anchor="middle">UptimeRobot (monitor)</text>
+
+  <!-- Arrows -->
+  <path class="arrow-line" d="M 230 152 L 230 195"/>
+  <path class="arrow-line" d="M 490 152 L 490 195"/>
+  <path class="arrow-line" d="M 750 152 L 750 195"/>
+  <path class="arrow-line" d="M 230 250 L 230 285"/>
+  <path class="arrow-line" d="M 490 250 L 490 285"/>
+  <path class="arrow-line" d="M 660 350 L 700 350"/>
+  <path class="arrow-line" d="M 660 425 L 700 425"/>
+
+  <!-- Footer -->
+  <text x="490" y="595" text-anchor="middle" font-size="11" fill="#64748b">Caetano &amp; Vieira Santos · 2026 · MIT License</text>
+</svg>
